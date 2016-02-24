@@ -13,26 +13,38 @@ namespace System.Runtime.Analyzers
     {
         protected override Location GetMethodNameLocation(SyntaxNode invocationNode)
         {
-            Debug.Assert(invocationNode.IsKind(SyntaxKind.InvocationExpression));
+            // Does not hold for IL
+            //Debug.Assert(invocationNode.IsKind(SyntaxKind.InvocationExpression));
 
             var invocation = invocationNode as InvocationExpressionSyntax;
-            if (invocation.Expression.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+            if (invocation != null)
             {
-                return ((MemberAccessExpressionSyntax)invocation.Expression).Name.GetLocation();
-            }
-            else if (invocation.Expression.IsKind(SyntaxKind.ConditionalAccessExpression))
-            {
-                return ((ConditionalAccessExpressionSyntax)invocation.Expression).WhenNotNull.GetLocation();
+                if (invocation.Expression.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+                {
+                    return ((MemberAccessExpressionSyntax)invocation.Expression).Name.GetLocation();
+                }
+                else if (invocation.Expression.IsKind(SyntaxKind.ConditionalAccessExpression))
+                {
+                    return ((ConditionalAccessExpressionSyntax)invocation.Expression).WhenNotNull.GetLocation();
+                }
             }
 
-            return invocation.GetLocation();
+            return invocationNode.GetLocation();
         }
 
         protected override Location GetOperatorTokenLocation(SyntaxNode binaryOperationNode)
         {
-            Debug.Assert(binaryOperationNode is BinaryExpressionSyntax);
+            // Does not hold for IL
+            //Debug.Assert(binaryOperationNode is BinaryExpressionSyntax);
 
-            return ((BinaryExpressionSyntax)binaryOperationNode).OperatorToken.GetLocation();
+            var binaryExpressionSyntax = binaryOperationNode as BinaryExpressionSyntax;
+
+            if (binaryExpressionSyntax != null)
+            {
+                return binaryExpressionSyntax.OperatorToken.GetLocation();
+            }
+
+            return binaryOperationNode.GetLocation();
         }
     }
 }

@@ -68,8 +68,7 @@ namespace System.Runtime.Analyzers
         private void AnalyzeInvocationExpression(IInvocationExpression operation, INamedTypeSymbol stringComparisonType, Action<Diagnostic> reportDiagnostic)
         {
             IMethodSymbol methodSymbol = operation.TargetMethod;
-            if (methodSymbol != null &&
-                methodSymbol.ContainingType.SpecialType == SpecialType.System_String &&
+            if (methodSymbol?.ContainingType?.SpecialType == SpecialType.System_String &&
                 IsEqualsOrCompare(methodSymbol.Name))
             {
                 if (!IsAcceptableOverload(methodSymbol, stringComparisonType))

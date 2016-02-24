@@ -45,7 +45,7 @@ namespace Microsoft.Maintainability.Analyzers
                         (symbolContext) =>
                         {
                             IFieldSymbol field = (IFieldSymbol)symbolContext.Symbol;
-                            if (field.DeclaredAccessibility == Accessibility.Private && !referencedPrivateFields.Contains(field))
+                            if (field.DeclaredAccessibility == Accessibility.Private && !field.IsConst && !referencedPrivateFields.Contains(field))
                             {
                                 unreferencedPrivateFields.Add(field);
                             }
